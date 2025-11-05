@@ -5,7 +5,6 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from "recharts"
 import { BookOpen } from "lucide-react"
 
@@ -21,9 +20,33 @@ interface JuzDistributionChartProps {
 // Colors for the pie chart
 const colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#f97316", "#84cc16", "#ec4899", "#6366f1"]
 
+// Custom Legend Component
+const CustomLegend = ({ chartData }: { chartData: Array<{ name: string; value: number; color: string }> }) => {
+  return (
+    <div className="flex flex-wrap justify-center gap-4 pt-4">
+      {chartData.map((entry, index) => (
+        <div key={`legend-${index}`} className="flex items-center gap-1.5">
+          <div 
+            className="w-3 h-3 rounded-full" 
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-xs text-gray-700">{entry.name}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function JuzDistributionChart({ data }: JuzDistributionChartProps) {
+  // Sort data by juz number (lowest to highest)
+  const sortedData = [...data].sort((a, b) => {
+    const juzA = parseInt(a.juz.replace('Juz ', ''))
+    const juzB = parseInt(b.juz.replace('Juz ', ''))
+    return juzA - juzB
+  })
+
   // Transform data for the chart
-  const chartData = data.map((item, index) => ({
+  const chartData = sortedData.map((item, index) => ({
     name: item.juz,
     value: item.students,
     color: colors[index % colors.length]
@@ -49,6 +72,7 @@ export function JuzDistributionChart({ data }: JuzDistributionChartProps) {
               outerRadius={90}
               paddingAngle={5}
               dataKey="value"
+              nameKey="name"
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -58,11 +82,9 @@ export function JuzDistributionChart({ data }: JuzDistributionChartProps) {
               labelStyle={{ fontSize: '13px' }}
               contentStyle={{ fontSize: '13px' }}
             />
-            <Legend 
-              wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }}
-            />
           </PieChart>
         </ResponsiveContainer>
+        <CustomLegend chartData={chartData} />
       </CardContent>
     </Card>
   )

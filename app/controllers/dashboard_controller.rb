@@ -41,6 +41,7 @@ class DashboardController < ApplicationController
                               .map do |activity|
                                 {
                                   id: activity.id,
+                                  student_id: activity.student.id,
                                   student: activity.student.name,
                                   activity: format_activity_description(activity),
                                   time: time_ago_in_words(activity.created_at) + " ago",
@@ -119,6 +120,7 @@ class DashboardController < ApplicationController
                                 .map do |activity|
                                   {
                                     id: activity.id,
+                                    student_id: activity.student.id,
                                     student: activity.student.name,
                                     activity: format_activity_description(activity),
                                     time: time_ago_in_words(activity.created_at) + " ago",

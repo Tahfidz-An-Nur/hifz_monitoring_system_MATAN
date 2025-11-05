@@ -35,7 +35,11 @@ export function AudioPlayer({ audioUrl, fileName = "recording.webm", className =
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
-      setDuration(audioRef.current.duration)
+      const audioDuration = audioRef.current.duration
+      // Check if duration is valid (not NaN or Infinity)
+      if (isFinite(audioDuration) && audioDuration > 0) {
+        setDuration(audioDuration)
+      }
     }
   }
 
@@ -45,6 +49,10 @@ export function AudioPlayer({ audioUrl, fileName = "recording.webm", className =
   }
 
   const formatTime = (seconds: number) => {
+    // Handle invalid numbers
+    if (!isFinite(seconds) || seconds < 0) {
+      return "0:00"
+    }
     const mins = Math.floor(seconds / 60)
     const secs = Math.floor(seconds % 60)
     return `${mins}:${secs.toString().padStart(2, '0')}`

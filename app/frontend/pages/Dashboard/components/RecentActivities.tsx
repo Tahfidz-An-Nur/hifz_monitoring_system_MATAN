@@ -19,9 +19,11 @@ import {
 import { AudioPlayer } from "@/components/AudioPlayer"
 import { useState } from "react"
 import axios from "axios"
+import { Link } from "@inertiajs/react"
 
 interface RecentActivity {
   id: number
+  student_id: string
   student: string
   activity: string
   time: string
@@ -31,6 +33,7 @@ interface RecentActivity {
 
 interface DetailedActivity {
   id: number
+  student_id: string
   student: string
   activity: string
   time: string
@@ -145,7 +148,12 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm font-medium">{activity.student}</p>
+                            <Link 
+                              href={`/students/${activity.student_id}`}
+                              className="text-sm font-medium hover:underline hover:text-blue-600 cursor-pointer"
+                            >
+                              {activity.student}
+                            </Link>
                             <p className="text-xs text-muted-foreground">{activity.activity}</p>
                           </div>
                           <Badge variant={activity.grade === "Excellent" ? "default" : 
@@ -234,7 +242,12 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
               )}
             </div>
             <div className="flex-1 space-y-1 min-w-0">
-              <p className="text-xs sm:text-sm font-medium">{activity.student}</p>
+              <Link 
+                href={`/students/${activity.student_id}`}
+                className="text-xs sm:text-sm font-medium hover:underline hover:text-blue-600 cursor-pointer block"
+              >
+                {activity.student}
+              </Link>
               <p className="text-xs text-muted-foreground line-clamp-2">{activity.activity}</p>
               <p className="text-xs text-muted-foreground">{activity.time}</p>
               {activity.audio_url && (

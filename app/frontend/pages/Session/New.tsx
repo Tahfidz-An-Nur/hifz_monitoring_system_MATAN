@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import React from "react"
 import { useForm, usePage } from "@inertiajs/react"
 import { AlertCircle } from "lucide-react"
+import matanLogo from "@/assets/matan_logo.jpeg"
 
 export default function Session() {
   const { flash } = usePage().props as {
@@ -35,10 +36,16 @@ export default function Session() {
   return (
     <>
       <SessionLayout>
-        <Card className="w-full max-w-sm border-gray-200/60 shadow-lg">
-          <CardHeader>
-            <CardTitle>Login to dashboard</CardTitle>
-          </CardHeader>
+        <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+          <img 
+            src={matanLogo} 
+            alt="MATAN Logo" 
+            className="w-32 h-32 object-contain"
+          />
+          <Card className="w-full border-gray-200/60 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-center">Login to dashboard</CardTitle>
+            </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
@@ -80,6 +87,7 @@ export default function Session() {
             </form>
           </CardContent>
         </Card>
+        </div>
       </SessionLayout>
     </>
   )

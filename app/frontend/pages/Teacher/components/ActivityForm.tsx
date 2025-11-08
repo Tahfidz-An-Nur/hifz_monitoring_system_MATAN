@@ -166,10 +166,12 @@ export function ActivityForm({
   };
 
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-indigo-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Plus className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-indigo-900">
+          <div className="h-10 w-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+            <Plus className="h-5 w-5 text-indigo-600" />
+          </div>
           Tambah Aktiviti
         </CardTitle>
         <CardDescription>Rekod aktiviti pelajar</CardDescription>
@@ -178,7 +180,7 @@ export function ActivityForm({
         <div className="space-y-2">
           <Label>Jenis Aktiviti</Label>
           <Select value={activityType} onValueChange={setActivityType}>
-            <SelectTrigger className="border-gray-200/60 cursor-pointer">
+            <SelectTrigger className="border-indigo-200 hover:border-indigo-300 cursor-pointer">
               <SelectValue placeholder="Pilih jenis aktiviti..." />
             </SelectTrigger>
             <SelectContent className="border-gray-200/60">

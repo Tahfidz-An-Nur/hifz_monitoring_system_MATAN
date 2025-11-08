@@ -23,10 +23,12 @@ interface ProgressChartProps {
 
 export function ProgressChart({ data }: ProgressChartProps) {
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-emerald-900">
+          <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <TrendingUp className="h-5 w-5 text-emerald-600" />
+          </div>
           Kemajuan Murajaah & Hafalan Bulanan
         </CardTitle>
         <CardDescription>Aktiviti bulanan semua pelajar</CardDescription>
@@ -56,14 +58,18 @@ export function ProgressChart({ data }: ProgressChartProps) {
               dataKey="revision" 
               stroke="#10b981" 
               strokeWidth={3} 
-              name="Aktiviti Murajaah" 
+              name="Aktiviti Murajaah"
+              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6 }}
             />
             <Line 
               type="monotone" 
               dataKey="memorization" 
-              stroke="#3b82f6" 
+              stroke="#f59e0b" 
               strokeWidth={3} 
-              name="Aktiviti Hafalan" 
+              name="Aktiviti Hafalan"
+              dot={{ fill: '#f59e0b', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6 }}
             />
           </LineChart>
         </ResponsiveContainer>

@@ -222,13 +222,13 @@ export default function EditStudent({ student, errors: serverErrors = {} }: Edit
           />
 
           {/* Submit Actions */}
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-blue-50/30">
             <CardContent className="pt-6">
               <div className="flex justify-end gap-3">
                 <Button
                   type="button"
                   variant="outline"
-                  className="cursor-pointer border-gray-200/60"
+                  className="cursor-pointer border-gray-300 hover:bg-gray-50"
                   onClick={handleBackClick}
                   disabled={isSubmitting}
                 >
@@ -237,7 +237,7 @@ export default function EditStudent({ student, errors: serverErrors = {} }: Edit
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex items-center gap-2 cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                 >
                   <Save className="h-4 w-4" />
                   {isSubmitting ? "Mengemaskini..." : "Kemaskini Pelajar"}

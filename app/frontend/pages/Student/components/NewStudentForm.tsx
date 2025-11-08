@@ -115,10 +115,12 @@ export function NewStudentForm({ formData, errors, handleInputChange, handleFile
   return (
     <div className="space-y-6">
       {/* Avatar Upload */}
-      <Card className="border-gray-200/60 shadow-lg">
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-indigo-50/30 hover:shadow-xl transition-shadow duration-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-indigo-900">
+            <div className="h-10 w-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+              <Upload className="h-5 w-5 text-indigo-600" />
+            </div>
             Foto Pelajar
           </CardTitle>
           <CardDescription>
@@ -150,10 +152,12 @@ export function NewStudentForm({ formData, errors, handleInputChange, handleFile
       </Card>
 
       {/* Basic Information */}
-      <Card className="border-gray-200/60 shadow-lg">
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-blue-50/30 hover:shadow-xl transition-shadow duration-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-blue-900">
+            <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+              <User className="h-5 w-5 text-blue-600" />
+            </div>
             Maklumat Asas
           </CardTitle>
           <CardDescription>
@@ -257,10 +261,12 @@ export function NewStudentForm({ formData, errors, handleInputChange, handleFile
       </Card>
 
       {/* Parent Information */}
-      <Card className="border-gray-200/60 shadow-lg">
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-purple-50/30 hover:shadow-xl transition-shadow duration-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-purple-900">
+            <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+              <User className="h-5 w-5 text-purple-600" />
+            </div>
             Maklumat Ibu Bapa
           </CardTitle>
           <CardDescription>
@@ -321,10 +327,12 @@ export function NewStudentForm({ formData, errors, handleInputChange, handleFile
       </Card>
 
       {/* Academic Information */}
-      <Card className="border-gray-200/60 shadow-lg">
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-xl transition-shadow duration-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-emerald-900">
+            <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <User className="h-5 w-5 text-emerald-600" />
+            </div>
             Maklumat Akademik
           </CardTitle>
           <CardDescription>

@@ -30,27 +30,29 @@ export function FiltersAndSearch({
   setViewMode
 }: FiltersAndSearchProps) {
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-cyan-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardContent className="p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-4">
-          <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900">Penapis & Carian</h2>
+          <div className="h-10 w-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+            <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-600" />
+          </div>
+          <h2 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">Penapis & Carian</h2>
         </div>
         
         <div className="flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center flex-1">
             <div className="relative flex-1 max-w-full sm:max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-cyan-600" />
               <Input
                 placeholder="Cari nama pelajar..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-gray-200/60"
+                className="pl-10 border-cyan-200 focus:border-cyan-400 focus:ring-cyan-400"
               />
             </div>
             <div className="flex flex-wrap justify-center items-center gap-2 sm:flex sm:gap-4">
               <Select value={classFilter} onValueChange={setClassFilter}>
-                <SelectTrigger className="border-gray-200/60 cursor-pointer">
+                <SelectTrigger className="border-cyan-200 hover:border-cyan-300 cursor-pointer">
                   <SelectValue placeholder="Semua Kelas" />
                 </SelectTrigger>
                 <SelectContent className="border-gray-200/60">
@@ -61,7 +63,7 @@ export function FiltersAndSearch({
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="border-gray-200/60 cursor-pointer">
+                <SelectTrigger className="border-cyan-200 hover:border-cyan-300 cursor-pointer">
                   <SelectValue placeholder="Semua Status" />
                 </SelectTrigger>
                 <SelectContent className="border-gray-200/60">
@@ -72,7 +74,7 @@ export function FiltersAndSearch({
                 </SelectContent>
               </Select>
               <Select value={juzFilter} onValueChange={setJuzFilter}>
-                <SelectTrigger className="border-gray-200/60 cursor-pointer">
+                <SelectTrigger className="border-cyan-200 hover:border-cyan-300 cursor-pointer">
                   <SelectValue placeholder="Semua Juz" />
                 </SelectTrigger>
                 <SelectContent className="border-gray-200/60">
@@ -90,7 +92,11 @@ export function FiltersAndSearch({
               <Button
                 variant={viewMode === "grid" ? "default" : "outline"}
                 size="sm"
-                className="border-gray-200/60 cursor-pointer flex-1 sm:flex-none"
+                className={`cursor-pointer flex-1 sm:flex-none ${
+                  viewMode === "grid" 
+                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700" 
+                    : "border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                }`}
                 onClick={() => setViewMode("grid")}
               >
                 Grid
@@ -98,7 +104,11 @@ export function FiltersAndSearch({
               <Button
                 variant={viewMode === "list" ? "default" : "outline"}
                 size="sm"
-                className="border-gray-200/60 cursor-pointer flex-1 sm:flex-none"
+                className={`cursor-pointer flex-1 sm:flex-none ${
+                  viewMode === "list" 
+                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700" 
+                    : "border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                }`}
                 onClick={() => setViewMode("list")}
               >
                 Senarai

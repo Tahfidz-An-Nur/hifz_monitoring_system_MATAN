@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, ChevronsUpDown, Search } from "lucide-react"
+import { Check, ChevronsUpDown, Search, Users } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
@@ -40,9 +40,14 @@ export function StudentSelection({ students, selectedStudent, setSelectedStudent
   }
 
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-violet-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardHeader>
-        <CardTitle>Pilih Pelajar</CardTitle>
+        <CardTitle className="flex items-center gap-2 text-violet-900">
+          <div className="h-10 w-10 rounded-full bg-violet-500/20 flex items-center justify-center">
+            <Users className="h-5 w-5 text-violet-600" />
+          </div>
+          Pilih Pelajar
+        </CardTitle>
         <CardDescription>Pilih pelajar untuk sesi hafalan</CardDescription>
       </CardHeader>
       <CardContent>
@@ -52,7 +57,7 @@ export function StudentSelection({ students, selectedStudent, setSelectedStudent
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-full justify-between border-gray-200/60 cursor-pointer"
+              className="w-full justify-between border-violet-200 hover:bg-violet-50 hover:border-violet-300 cursor-pointer"
             >
               {selectedStudent
                 ? students.find((student) => student.id === selectedStudent)?.name

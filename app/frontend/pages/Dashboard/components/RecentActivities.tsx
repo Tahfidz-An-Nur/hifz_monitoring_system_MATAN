@@ -95,12 +95,14 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
     }
   }
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-800">
+              <div className="h-10 w-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                <Clock className="h-5 w-5 text-indigo-600" />
+              </div>
               Aktiviti Terkini
             </CardTitle>
             <CardDescription>Aktiviti hafalan pelajar dalam beberapa jam terakhir</CardDescription>
@@ -108,7 +110,7 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
           {totalActivitiesCount > 5 && (
             <Dialog open={isOpen} onOpenChange={handleOpenChange}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="cursor-pointer border-gray-200/60">
+                <Button variant="outline" size="sm" className="cursor-pointer border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700">
                   Lihat Semua ({totalActivitiesCount})
                 </Button>
               </DialogTrigger>
@@ -127,14 +129,14 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
                 ) : (
                   <div className="space-y-4 mt-4">
                     {allActivities.map((activity) => (
-                    <div key={activity.id} className="flex items-start space-x-3 p-4 border border-gray-200 rounded-lg">
+                    <div key={activity.id} className="flex items-start space-x-3 p-4 border-0 bg-gradient-to-r from-white to-slate-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                       <div
                         className={`flex h-8 w-8 items-center justify-center rounded-full text-white text-xs flex-shrink-0 ${
                           activity.type === "memorization"
-                            ? "bg-blue-500"
+                            ? "bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm"
                             : activity.type === "revision"
-                              ? "bg-green-500"
-                              : "bg-gray-500"
+                              ? "bg-gradient-to-br from-green-400 to-green-600 shadow-sm"
+                              : "bg-gradient-to-br from-gray-400 to-gray-600 shadow-sm"
                         }`}
                       >
                         {activity.type === "memorization" ? (
@@ -223,14 +225,14 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
       </CardHeader>
       <CardContent className="space-y-3 sm:space-y-4">
         {activities.map((activity) => (
-          <div key={activity.id} className="flex items-start space-x-3">
+          <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-slate-50 transition-colors duration-200">
             <div
               className={`flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full text-white text-xs flex-shrink-0 ${
                 activity.type === "memorization"
-                  ? "bg-blue-500"
+                  ? "bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm"
                   : activity.type === "revision"
-                    ? "bg-green-500"
-                    : "bg-gray-500"
+                    ? "bg-gradient-to-br from-green-400 to-green-600 shadow-sm"
+                    : "bg-gradient-to-br from-gray-400 to-gray-600 shadow-sm"
               }`}
             >
               {activity.type === "memorization" ? (

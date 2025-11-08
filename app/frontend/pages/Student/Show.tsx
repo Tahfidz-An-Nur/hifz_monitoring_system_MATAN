@@ -333,10 +333,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
         </Card>
 
         {/* Student detailed information card */}
-        <Card className="border-gray-200/60 shadow-lg">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-blue-50/30 hover:shadow-xl transition-shadow duration-200">
           <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-              <User className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl text-blue-900">
+              <div className="h-10 w-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <User className="h-5 w-5 text-blue-600" />
+              </div>
               Butiran Pelajar
             </CardTitle>
             <CardDescription className="text-sm">Data lengkap dan maklumat hubungan</CardDescription>
@@ -395,38 +397,44 @@ export default function StudentShow({ student, recent_activities, total_activiti
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-2">
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-green-100/50 hover:shadow-xl transition-shadow duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Penyerahan Hari Ini</CardTitle>
-              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-green-900">Penyerahan Hari Ini</CardTitle>
+              <div className="h-10 w-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                <CalendarIcon className="h-4 w-4 text-green-600" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {todaySubmissions} <span className="text-lg font-normal text-muted-foreground">Aktiviti</span>
+              <div className="text-2xl font-bold text-green-600">
+                {todaySubmissions} <span className="text-lg font-normal text-green-700/70">Aktiviti</span>
               </div>
-              <p className="text-xs text-muted-foreground">Penyerahan hari ini</p>
+              <p className="text-xs text-green-700/70">Penyerahan hari ini</p>
             </CardContent>
           </Card>
 
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-xl transition-shadow duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Kemajuan Semasa</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-purple-900">Kemajuan Semasa</CardTitle>
+              <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-purple-600" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{student?.current_hifz_in_surah}</div>
-              <p className="text-xs text-muted-foreground">Juz {student?.current_hifz_in_juz || 0} • {student?.current_hifz_in_pages || 0} muka surat dihafal</p>
+              <div className="text-2xl font-bold text-purple-600">{student?.current_hifz_in_surah}</div>
+              <p className="text-xs text-purple-700/70">Juz {student?.current_hifz_in_juz || 0} • {student?.current_hifz_in_pages || 0} muka surat dihafal</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Daily Submissions Chart - Full Width, Hidden on mobile */}
-        <Card className="hidden md:block border-gray-200/60 shadow-lg">
+        <Card className="hidden md:block border-0 shadow-lg bg-gradient-to-br from-white to-cyan-50/30 hover:shadow-xl transition-shadow duration-200">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <CalendarIcon className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-cyan-900">
+                  <div className="h-10 w-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                    <CalendarIcon className="h-5 w-5 text-cyan-600" />
+                  </div>
                   Penyerahan Harian
                 </CardTitle>
                 <CardDescription>Penyerahan hafalan harian {student?.name}</CardDescription>
@@ -509,10 +517,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
         </Card>
 
         {/* Progress Chart - Hidden on mobile */}
-        <Card className="hidden md:block border-gray-200/60 shadow-lg">
+        <Card className="hidden md:block border-0 shadow-lg bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-xl transition-shadow duration-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-emerald-900">
+              <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-emerald-600" />
+              </div>
               Monthly Progress & Projection
             </CardTitle>
             <CardDescription>
@@ -583,10 +593,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
         </Card>
 
         {/* Monthly Activities Chart - Hidden on mobile */}
-        <Card className="hidden md:block border-gray-200/60 shadow-lg">
+        <Card className="hidden md:block border-0 shadow-lg bg-gradient-to-br from-white to-indigo-50/30 hover:shadow-xl transition-shadow duration-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-indigo-900">
+              <div className="h-10 w-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                <BookOpen className="h-5 w-5 text-indigo-600" />
+              </div>
               Monthly Revision & Memorization Activities
             </CardTitle>
             <CardDescription>
@@ -630,10 +642,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
         {/* Pie Charts Section - Side by Side, Hidden on mobile */}
         <div className="hidden md:grid gap-6 md:grid-cols-2">
           {/* Activity Grade Distribution */}
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-amber-50/30 hover:shadow-xl transition-shadow duration-200">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2 text-amber-900">
+                <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                  <Award className="h-5 w-5 text-amber-600" />
+                </div>
                 Taburan Prestasi
               </CardTitle>
               <CardDescription>Kualiti aktiviti hafalan</CardDescription>
@@ -675,10 +689,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
           </Card>
 
           {/* Activity Type Distribution */}
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-teal-50/30 hover:shadow-xl transition-shadow duration-200">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2 text-teal-900">
+                <div className="h-10 w-10 rounded-full bg-teal-500/20 flex items-center justify-center">
+                  <BookOpen className="h-5 w-5 text-teal-600" />
+                </div>
                 Jenis Aktiviti
               </CardTitle>
               <CardDescription>Imbangan hafalan vs murajaah</CardDescription>
@@ -740,10 +756,12 @@ export default function StudentShow({ student, recent_activities, total_activiti
           </div>
 
           {/* Student Stats */}
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-violet-50/30 hover:shadow-xl transition-shadow duration-200">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2 text-violet-900">
+                <div className="h-10 w-10 rounded-full bg-violet-500/20 flex items-center justify-center">
+                  <Target className="h-5 w-5 text-violet-600" />
+                </div>
                 Statistik Pelajar
               </CardTitle>
               <CardDescription>Ringkasan pencapaian {student?.name}</CardDescription>
@@ -771,12 +789,14 @@ export default function StudentShow({ student, recent_activities, total_activiti
           </Card>
 
           {/* Recent Activities */}
-          <Card className="border-gray-200/60 shadow-lg">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50/30 hover:shadow-xl transition-shadow duration-200">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
+                  <CardTitle className="flex items-center gap-2 text-slate-900">
+                    <div className="h-10 w-10 rounded-full bg-slate-500/20 flex items-center justify-center">
+                      <Clock className="h-5 w-5 text-slate-600" />
+                    </div>
                     Aktiviti Terkini
                   </CardTitle>
                   <CardDescription>Aktiviti terkini {student?.name}</CardDescription>

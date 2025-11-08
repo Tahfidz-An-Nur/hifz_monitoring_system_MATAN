@@ -141,12 +141,14 @@ export function AudioRecorder({ onAudioRecorded, disabled = false }: AudioRecord
   }
 
   return (
-    <Card className="border-gray-200/60">
+    <Card className="border-0 shadow-md bg-gradient-to-br from-white to-rose-50/30">
       <CardContent className="p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Mic className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Rakaman Audio (Pilihan)</span>
+            <div className="h-8 w-8 rounded-full bg-rose-500/20 flex items-center justify-center">
+              <Mic className="h-4 w-4 text-rose-600" />
+            </div>
+            <span className="text-sm font-medium text-rose-900">Rakaman Audio (Pilihan)</span>
           </div>
           {hasRecording && (
             <Badge variant="secondary" className="text-xs">

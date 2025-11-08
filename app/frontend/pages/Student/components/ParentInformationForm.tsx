@@ -22,10 +22,12 @@ interface ParentInformationFormProps {
 
 export function ParentInformationForm({ formData, errors, handleInputChange }: ParentInformationFormProps) {
   return (
-    <Card className="border-gray-200/60 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-pink-50/30 hover:shadow-xl transition-shadow duration-200">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-pink-900">
+          <div className="h-10 w-10 rounded-full bg-pink-500/20 flex items-center justify-center">
+            <Users className="h-5 w-5 text-pink-600" />
+          </div>
           Maklumat Ibu Bapa
         </CardTitle>
         <CardDescription>

@@ -289,7 +289,7 @@ export default function StudentShow({ student, recent_activities, total_activiti
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4 sm:gap-0">
             <Button
               variant="default"
-              className="cursor-pointer"
+              className="cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               onClick={() => router.visit(`/students/${student.id}/edit`)}
             >
               <Edit className="h-4 w-4 mr-2" />
@@ -298,7 +298,7 @@ export default function StudentShow({ student, recent_activities, total_activiti
             </Button>
             <Button
               variant="outline"
-              className="border-gray-200/60 cursor-pointer"
+              className="border-gray-200 hover:bg-gray-50 hover:text-gray-700 hover:border-gray-300 cursor-pointer"
               onClick={() => router.visit('/students')}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

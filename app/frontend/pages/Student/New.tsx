@@ -167,7 +167,7 @@ export default function CreateStudent() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:space-x-4 sm:gap-0">
             <Button
               variant="outline"
-              className="border-gray-200/60 cursor-pointer"
+              className="border-gray-200 hover:bg-gray-50 hover:text-gray-700 hover:border-gray-300 cursor-pointer"
               onClick={handleBackClick}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

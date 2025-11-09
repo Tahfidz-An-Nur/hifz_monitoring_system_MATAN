@@ -44,6 +44,8 @@ interface DetailedActivity {
   page_from: number
   page_to: number
   juz: number
+  juz_from?: number | null
+  juz_to?: number | null
   notes?: string
   audio_url?: string | null
 }
@@ -173,7 +175,10 @@ export function RecentActivities({ activities, totalActivitiesCount }: RecentAct
                             <span className="font-medium">Muka Surat:</span> {activity.page_from}-{activity.page_to}
                           </div>
                           <div>
-                            <span className="font-medium">Juz:</span> {activity.juz || 'T/A'}
+                            <span className="font-medium">Juz:</span>{' '}
+                            {activity.type === 'revision' && activity.juz_from && activity.juz_to 
+                              ? `${activity.juz_from}${activity.juz_from !== activity.juz_to ? `-${activity.juz_to}` : ''}`
+                              : activity.juz || 'T/A'}
                           </div>
                           <div>
                             <span className="font-medium">Masa:</span> {activity.time}

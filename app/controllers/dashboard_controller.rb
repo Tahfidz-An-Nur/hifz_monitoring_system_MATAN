@@ -132,6 +132,8 @@ class DashboardController < ApplicationController
                                     page_from: activity.page_from,
                                     page_to: activity.page_to,
                                     juz: activity.juz,
+                                    juz_from: activity.juz_from,
+                                    juz_to: activity.juz_to,
                                     notes: activity.notes,
                                     audio_url: activity.audio.attached? ? url_for(activity.audio) : nil
                                   }
@@ -154,11 +156,11 @@ class DashboardController < ApplicationController
   end
 
   def format_activity_description(activity)
-    type_text = activity.activity_type == "memorization" ? "Memorized" : "Reviewed"
+    type_text = activity.activity_type == "memorization" ? "Menghafal" : "Murajaah"
     if activity.surah_from == activity.surah_to
-      "#{type_text} #{activity.surah_from} pages #{activity.page_from}-#{activity.page_to}"
+      "#{type_text} #{activity.surah_from} muka surat #{activity.page_from}-#{activity.page_to}"
     else
-      "#{type_text} from #{activity.surah_from} to #{activity.surah_to}"
+      "#{type_text} dari #{activity.surah_from} hingga #{activity.surah_to}"
     end
   end
 end

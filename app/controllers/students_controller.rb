@@ -110,6 +110,8 @@ class StudentsController < ApplicationController
                                     page_from: activity.page_from,
                                     page_to: activity.page_to,
                                     juz: activity.juz,
+                                    juz_from: activity.juz_from,
+                                    juz_to: activity.juz_to,
                                     notes: activity.notes,
                                     audio_url: activity.audio.attached? ? url_for(activity.audio) : nil
                                   }
@@ -176,11 +178,11 @@ class StudentsController < ApplicationController
 
     case activity.activity_type
     when "memorization"
-      "Memorized #{surah_display} pages #{activity.page_from}-#{activity.page_to}"
+      "Menghafal #{surah_display} muka surat #{activity.page_from}-#{activity.page_to}"
     when "revision"
-      "Revised #{surah_display} pages #{activity.page_from}-#{activity.page_to}"
+      "Murajaah #{surah_display} muka surat #{activity.page_from}-#{activity.page_to}"
     else
-      "#{activity.activity_type.humanize} #{surah_display} pages #{activity.page_from}-#{activity.page_to}"
+      "#{activity.activity_type.humanize} #{surah_display} muka surat #{activity.page_from}-#{activity.page_to}"
     end
   end
 

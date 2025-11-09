@@ -100,6 +100,8 @@ interface DetailedActivity {
   page_from: number
   page_to: number
   juz: number
+  juz_from?: number | null
+  juz_to?: number | null
   notes?: string
   audio_url?: string | null
 }
@@ -856,18 +858,21 @@ export default function StudentShow({ student, recent_activities, total_activiti
                                   {activity.surah_from !== activity.surah_to && ` - ${activity.surah_to}`}
                                 </div>
                                 <div>
-                                  <span className="font-medium">Pages:</span> {activity.page_from}-{activity.page_to}
+                                  <span className="font-medium">Muka Surat:</span> {activity.page_from}-{activity.page_to}
                                 </div>
                                 <div>
-                                  <span className="font-medium">Juz:</span> {activity.juz || 'N/A'}
+                                  <span className="font-medium">Juz:</span>{' '}
+                                  {activity.type === 'revision' && activity.juz_from && activity.juz_to 
+                                    ? `${activity.juz_from}${activity.juz_from !== activity.juz_to ? `-${activity.juz_to}` : ''}`
+                                    : activity.juz || 'T/A'}
                                 </div>
                                 <div>
-                                  <span className="font-medium">Time:</span> {activity.time}
+                                  <span className="font-medium">Masa:</span> {activity.time}
                                 </div>
                               </div>
                               {activity.notes && (
                                 <div className="text-xs text-muted-foreground">
-                                  <span className="font-medium">Notes:</span> {activity.notes}
+                                  <span className="font-medium">Catatan:</span> {activity.notes}
                                 </div>
                               )}
                               {activity.audio_url && (
@@ -909,11 +914,11 @@ export default function StudentShow({ student, recent_activities, total_activiti
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3 sm:space-y-4">
               {recent_activities.map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-slate-50 transition-colors duration-200">
                   <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-full text-white text-xs ${
+                    className={`flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full text-white text-xs flex-shrink-0 ${
                       activity.type === "memorization"
                         ? "bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm"
                         : activity.type === "revision"
@@ -922,15 +927,15 @@ export default function StudentShow({ student, recent_activities, total_activiti
                     }`}
                   >
                     {activity.type === "memorization" ? (
-                      <BookOpen className="h-4 w-4" />
+                      <BookOpen className="h-3 w-3 sm:h-4 sm:w-4" />
                     ) : activity.type === "revision" ? (
-                      <Star className="h-4 w-4" />
+                      <Star className="h-3 w-3 sm:h-4 sm:w-4" />
                     ) : (
-                      <Target className="h-4 w-4" />
+                      <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                   </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm">{activity.activity}</p>
+                  <div className="flex-1 space-y-1 min-w-0">
+                    <p className="text-xs sm:text-sm font-medium line-clamp-2">{activity.activity}</p>
                     <p className="text-xs text-muted-foreground">{activity.time}</p>
                     {activity.audio_url && (
                       <div className="mt-1">
@@ -942,7 +947,6 @@ export default function StudentShow({ student, recent_activities, total_activiti
                       </div>
                     )}
                   </div>
-
                 </div>
               ))}
               {recent_activities.length === 0 && (

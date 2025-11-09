@@ -25,6 +25,8 @@ interface Activity {
   page_from: number
   page_to: number
   juz: number | null
+  juz_from: number | null
+  juz_to: number | null
   notes: string | null
   created_at: string
   audio_url?: string | null
@@ -88,7 +90,18 @@ export function RecentActivities({ currentStudent, activityTypes, recentActiviti
         ) : (
           studentActivities.map((activity) => {
             const activityType = activityTypes.find((t) => t.value === activity.activity_type)
-            const activityDescription = `${activityLabels[activity.activity_type as keyof typeof activityLabels]} ${activity.surah_from}${activity.surah_from !== activity.surah_to ? ` - ${activity.surah_to}` : ''} pages ${activity.page_from}-${activity.page_to}`
+            
+            // Build activity description
+            let activityDescription = `${activityLabels[activity.activity_type as keyof typeof activityLabels]} ${activity.surah_from}${activity.surah_from !== activity.surah_to ? ` - ${activity.surah_to}` : ''}`
+            
+            // Add juz information for revision activities
+            if (activity.activity_type === 'revision' && activity.juz_from && activity.juz_to) {
+              activityDescription += `, Juz ${activity.juz_from}${activity.juz_from !== activity.juz_to ? `-${activity.juz_to}` : ''}`
+            } else if (activity.juz) {
+              activityDescription += `, Juz ${activity.juz}`
+            }
+            
+            activityDescription += `, muka surat ${activity.page_from}-${activity.page_to}`
             
             return (
               <div key={activity.id} className="flex items-start space-x-2 sm:space-x-3">

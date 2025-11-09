@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import React from "react"
 import { useForm, usePage } from "@inertiajs/react"
 import { AlertCircle } from "lucide-react"
-import matanLogo from "@/assets/matan_logo.jpeg"
+import matanLogo from "@/assets/matan_logo.png"
 
 export default function Session() {
   const { flash } = usePage().props as {

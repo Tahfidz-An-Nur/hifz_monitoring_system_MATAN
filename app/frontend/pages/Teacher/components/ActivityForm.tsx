@@ -21,6 +21,8 @@ interface ActivityDetails {
   pageFrom: string
   pageTo: string
   juz: string
+  juzFrom: string
+  juzTo: string
   notes: string
   evaluation: string
 }
@@ -116,6 +118,8 @@ export function ActivityForm({
       page_from: parseInt(activityDetails.pageFrom),
       page_to: parseInt(activityDetails.pageTo),
       juz: activityDetails.juz ? parseInt(activityDetails.juz) : null,
+      juz_from: activityDetails.juzFrom ? parseInt(activityDetails.juzFrom) : null,
+      juz_to: activityDetails.juzTo ? parseInt(activityDetails.juzTo) : null,
       notes: activityDetails.notes || '',
       new_hifz_juz: activityType === 'memorization' && newProgress ? newProgress.newJuz : null,
       new_hifz_pages: activityType === 'memorization' && newProgress ? newProgress.newPages : null,
@@ -150,6 +154,8 @@ export function ActivityForm({
           pageFrom: "",
           pageTo: "",
           juz: "",
+          juzFrom: "",
+          juzTo: "",
           notes: "",
           evaluation: "",
         });
@@ -268,24 +274,67 @@ export function ActivityForm({
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Juz {activityType === "memorization" && <span className="text-red-500">*</span>}</Label>
-                  <Select
-                    value={activityDetails.juz}
-                    onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juz: value }))}
-                  >
-                    <SelectTrigger className="border-gray-200/60">
-                      <SelectValue placeholder="Pilih juz..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 30 }, (_, i) => (
-                        <SelectItem key={i + 1} value={(i + 1).toString()} className="cursor-pointer">
-                          Juz {i + 1}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {activityType === "revision" && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
+                      <Label className="text-xs sm:text-sm">Juz Dari</Label>
+                      <Select
+                        value={activityDetails.juzFrom}
+                        onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juzFrom: value }))}
+                      >
+                        <SelectTrigger className="border-gray-200/60 cursor-pointer">
+                          <SelectValue placeholder="Pilih juz..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 30 }, (_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()} className="cursor-pointer">
+                              Juz {i + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs sm:text-sm">Juz Hingga</Label>
+                      <Select
+                        value={activityDetails.juzTo}
+                        onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juzTo: value }))}
+                      >
+                        <SelectTrigger className="border-gray-200/60 cursor-pointer">
+                          <SelectValue placeholder="Pilih juz..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 30 }, (_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()} className="cursor-pointer">
+                              Juz {i + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                )}
+
+                {activityType === "memorization" && (
+                  <div className="space-y-2">
+                    <Label>Juz <span className="text-red-500">*</span></Label>
+                    <Select
+                      value={activityDetails.juz}
+                      onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juz: value }))}
+                    >
+                      <SelectTrigger className="border-gray-200/60">
+                        <SelectValue placeholder="Pilih juz..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 30 }, (_, i) => (
+                          <SelectItem key={i + 1} value={(i + 1).toString()} className="cursor-pointer">
+                            Juz {i + 1}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
 
                 {activityType === "memorization" && currentStudent && (
                   <div className="space-y-2">

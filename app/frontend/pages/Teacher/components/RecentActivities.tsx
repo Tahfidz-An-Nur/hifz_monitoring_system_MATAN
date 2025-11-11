@@ -94,8 +94,8 @@ export function RecentActivities({ currentStudent, activityTypes, recentActiviti
             // Build activity description
             let activityDescription = `${activityLabels[activity.activity_type as keyof typeof activityLabels]} ${activity.surah_from}${activity.surah_from !== activity.surah_to ? ` - ${activity.surah_to}` : ''}`
             
-            // Add juz information for revision activities
-            if (activity.activity_type === 'revision' && activity.juz_from && activity.juz_to) {
+            // Add juz information - use juz_from and juz_to if available
+            if (activity.juz_from && activity.juz_to) {
               activityDescription += `, Juz ${activity.juz_from}${activity.juz_from !== activity.juz_to ? `-${activity.juz_to}` : ''}`
             } else if (activity.juz) {
               activityDescription += `, Juz ${activity.juz}`

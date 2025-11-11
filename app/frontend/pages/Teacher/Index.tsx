@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   BookOpen,
   Star,
@@ -154,6 +154,8 @@ type TeacherIndexProps = {
     page_from: number
     page_to: number
     juz: number | null
+    juz_from: number | null
+    juz_to: number | null
     notes: string | null
     created_at: string
     student: {
@@ -174,11 +176,25 @@ export default function TeacherIndex({ students, recent_activities }: TeacherInd
     pageFrom: "",
     pageTo: "",
     juz: "",
+    juzFrom: "",
+    juzTo: "",
     notes: "",
     evaluation: "",
   })
 
   const currentStudent = students.find((s) => s.id === selectedStudent)
+
+  // Auto-fill surahFrom, pageFrom, and juzFrom for memorization activity based on current student progress
+  useEffect(() => {
+    if (activityType === "memorization" && currentStudent) {
+      setActivityDetails((prev) => ({
+        ...prev,
+        surahFrom: currentStudent.current_hifz_in_surah || "",
+        pageFrom: currentStudent.current_hifz_in_pages || "",
+        juzFrom: currentStudent.current_hifz_in_juz || "",
+      }))
+    }
+  }, [activityType, currentStudent])
 
   const handleSaveActivity = () => {
     // This function is now handled by the ActivityForm component itself
@@ -189,6 +205,8 @@ export default function TeacherIndex({ students, recent_activities }: TeacherInd
       pageFrom: "",
       pageTo: "",
       juz: "",
+      juzFrom: "",
+      juzTo: "",
       notes: "",
       evaluation: "",
     })

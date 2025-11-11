@@ -70,13 +70,14 @@ export function ActivityForm({
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   
   const calculateNewProgress = () => {
-    if (!activityDetails.juz || !activityDetails.pageTo) return null;
+    // For memorization, use juzTo and pageTo
+    if (activityType === 'memorization' && activityDetails.juzTo && activityDetails.pageTo) {
+      const juzTo = parseInt(activityDetails.juzTo);
+      const pageTo = parseInt(activityDetails.pageTo);
+      return { newJuz: juzTo, newPages: pageTo };
+    }
     
-    const juz = parseInt(activityDetails.juz);
-    const pageTo = parseInt(activityDetails.pageTo);
-    
-    // For memorization activities, the new progress is simply the page they completed up to
-    return { newJuz: juz, newPages: pageTo };
+    return null;
   };
 
   const validateMemorizationProgress = () => {
@@ -117,7 +118,7 @@ export function ActivityForm({
       surah_to: activityDetails.surahTo,
       page_from: parseInt(activityDetails.pageFrom),
       page_to: parseInt(activityDetails.pageTo),
-      juz: activityDetails.juz ? parseInt(activityDetails.juz) : null,
+      juz: null, // No longer used
       juz_from: activityDetails.juzFrom ? parseInt(activityDetails.juzFrom) : null,
       juz_to: activityDetails.juzTo ? parseInt(activityDetails.juzTo) : null,
       notes: activityDetails.notes || '',
@@ -274,10 +275,12 @@ export function ActivityForm({
                   </div>
                 </div>
 
-                {activityType === "revision" && (
+                {(activityType === "memorization" || activityType === "revision") && (
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-2">
-                      <Label className="text-xs sm:text-sm">Juz Dari</Label>
+                      <Label className="text-xs sm:text-sm">
+                        Juz Dari {activityType === "memorization" && <span className="text-red-500">*</span>}
+                      </Label>
                       <Select
                         value={activityDetails.juzFrom}
                         onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juzFrom: value }))}
@@ -295,7 +298,9 @@ export function ActivityForm({
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-xs sm:text-sm">Juz Hingga</Label>
+                      <Label className="text-xs sm:text-sm">
+                        Juz Hingga {activityType === "memorization" && <span className="text-red-500">*</span>}
+                      </Label>
                       <Select
                         value={activityDetails.juzTo}
                         onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juzTo: value }))}
@@ -315,33 +320,12 @@ export function ActivityForm({
                   </div>
                 )}
 
-                {activityType === "memorization" && (
-                  <div className="space-y-2">
-                    <Label>Juz <span className="text-red-500">*</span></Label>
-                    <Select
-                      value={activityDetails.juz}
-                      onValueChange={(value) => setActivityDetails((prev) => ({ ...prev, juz: value }))}
-                    >
-                      <SelectTrigger className="border-gray-200/60">
-                        <SelectValue placeholder="Pilih juz..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 30 }, (_, i) => (
-                          <SelectItem key={i + 1} value={(i + 1).toString()} className="cursor-pointer">
-                            Juz {i + 1}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-
                 {activityType === "memorization" && currentStudent && (
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">
                       Kemajuan Semasa: {currentStudent.current_hifz_in_surah}, Juz {currentStudent.current_hifz_in_juz}, {currentStudent.current_hifz_in_pages} muka surat
                     </Label>
-                    {activityDetails.juz && activityDetails.pageTo && (() => {
+                    {activityDetails.juzTo && activityDetails.pageTo && (() => {
                       const newProgress = calculateNewProgress();
                       return newProgress ? (
                         <div className="text-sm text-muted-foreground">
@@ -399,7 +383,7 @@ export function ActivityForm({
                 !activityDetails.pageFrom || 
                 !activityDetails.pageTo || 
                 !activityDetails.evaluation ||
-                (activityType === 'memorization' && !activityDetails.juz) ||
+                (activityType === 'memorization' && (!activityDetails.juzFrom || !activityDetails.juzTo)) ||
                 !validateMemorizationProgress()
               }
             >

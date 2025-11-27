@@ -473,14 +473,16 @@ export default function ParentShow({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-gray-600" />
-                  Aktiviti Terkini
+                  <div className="h-10 w-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                      <Clock className="h-5 w-5 text-indigo-600" />
+                    </div>
+                    Aktiviti Terkini
                 </CardTitle>
                 <CardDescription>5 aktiviti hafalan terkini</CardDescription>
               </div>
               <Button
                 variant="outline"
-                className="border-blue-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 w-full sm:w-auto"
+                className="border-blue-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 w-full sm:w-auto cursor-pointer"
                 onClick={handleViewAllActivities}
                 disabled={isLoadingActivities}
               >
@@ -492,7 +494,6 @@ export default function ParentShow({
                 ) : (
                   <>
                     Lihat Semua Aktiviti ({total_activities_count})
-                    <ChevronDown className="ml-2 h-4 w-4" />
                   </>
                 )}
               </Button>
@@ -506,15 +507,15 @@ export default function ParentShow({
                   className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors gap-3"
                 >
                   <div className="flex items-start gap-3 flex-1">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                      activity.type === "memorization" ? "bg-blue-100" : "bg-green-100"
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-full text-white ${
+                      activity.type === "memorization" 
+                        ? "bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm" 
+                        : "bg-gradient-to-br from-green-400 to-green-600 shadow-sm"
                     }`}>
                       {activity.type === "memorization" ? (
-                        <BookOpen className={`h-5 w-5 ${
-                          activity.type === "memorization" ? "text-blue-600" : "text-green-600"
-                        }`} />
+                        <BookOpen className="h-5 w-5" />
                       ) : (
-                        <Star className="h-5 w-5 text-green-600" />
+                        <Star className="h-5 w-5" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -546,39 +547,66 @@ export default function ParentShow({
               {allActivities.map((activity) => (
                 <div
                   key={activity.id}
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors"
+                  className="flex items-start space-x-3 p-4 border-0 bg-gradient-to-r from-white to-slate-50 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-start gap-3">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full flex-shrink-0 ${
-                          activity.type === "memorization" ? "bg-blue-100" : "bg-green-100"
-                        }`}>
-                          {activity.type === "memorization" ? (
-                            <BookOpen className="h-5 w-5 text-blue-600" />
-                          ) : (
-                            <Star className="h-5 w-5 text-green-600" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{activity.activity}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
-                          {activity.grade && (
-                            <Badge className="mt-2" variant="outline">
-                              Gred: {activity.grade}
-                            </Badge>
-                          )}
-                          {activity.notes && (
-                            <p className="text-xs text-muted-foreground mt-2 italic">
-                              Nota: {activity.notes}
-                            </p>
-                          )}
-                        </div>
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-full text-white text-xs flex-shrink-0 ${
+                      activity.type === "memorization"
+                        ? "bg-gradient-to-br from-orange-400 to-orange-600 shadow-sm"
+                        : activity.type === "revision"
+                          ? "bg-gradient-to-br from-green-400 to-green-600 shadow-sm"
+                          : "bg-gradient-to-br from-gray-400 to-gray-600 shadow-sm"
+                    }`}
+                  >
+                    {activity.type === "memorization" ? (
+                      <BookOpen className="h-4 w-4" />
+                    ) : activity.type === "revision" ? (
+                      <Star className="h-4 w-4" />
+                    ) : (
+                      <Target className="h-4 w-4" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium">{activity.activity}</p>
+                      {activity.grade && (
+                        <Badge variant={activity.grade === "Cemerlang" ? "default" : 
+                                      activity.grade === "Baik" ? "secondary" : 
+                                      activity.grade === "Sederhana" ? "outline" : "destructive"}>
+                          {activity.grade}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
+                      <div>
+                        <span className="font-medium">Surah:</span> {activity.surah_from}
+                        {activity.surah_from !== activity.surah_to && ` - ${activity.surah_to}`}
+                      </div>
+                      <div>
+                        <span className="font-medium">Muka Surat:</span> {activity.page_from}-{activity.page_to}
+                      </div>
+                      <div>
+                        <span className="font-medium">Juz:</span>{' '}
+                        {activity.type === 'revision' && activity.juz_from && activity.juz_to 
+                          ? `${activity.juz_from}${activity.juz_from !== activity.juz_to ? `-${activity.juz_to}` : ''}`
+                          : activity.juz || 'T/A'}
+                      </div>
+                      <div>
+                        <span className="font-medium">Masa:</span> {activity.time}
                       </div>
                     </div>
+                    {activity.notes && (
+                      <div className="text-xs text-muted-foreground">
+                        <span className="font-medium">Catatan:</span> {activity.notes}
+                      </div>
+                    )}
                     {activity.audio_url && (
-                      <div className="flex-shrink-0">
-                        <AudioPlayer audioUrl={activity.audio_url} />
+                      <div className="mt-2">
+                        <AudioPlayer 
+                          audioUrl={activity.audio_url} 
+                          size="sm"
+                          className="max-w-full"
+                        />
                       </div>
                     )}
                   </div>
@@ -590,6 +618,7 @@ export default function ParentShow({
                     variant="outline"
                     onClick={loadMoreActivities}
                     disabled={isLoadingActivities}
+                    className="cursor-pointer"
                   >
                     {isLoadingActivities ? (
                       <>

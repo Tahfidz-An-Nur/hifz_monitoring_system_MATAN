@@ -1,0 +1,67 @@
+class UsersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :require_pengurus!
+  before_action :set_user, only: [ :update_role ]
+
+  def index
+    @users = User.includes(:student).order(created_at: :desc)
+    
+    users_data = @users.map do |user|
+      {
+        id: user.id,
+        email: user.email_address,
+        role: user.role,
+        student_name: user.student&.name,
+        student_id: user.student_id,
+        created_at: user.created_at.strftime("%d/%m/%Y")
+      }
+    end
+
+    respond_to do |format|
+      format.html do
+        render inertia: "Users/Index", props: {
+          users: users_data,
+          available_roles: User.roles.keys
+        }
+      end
+    end
+  end
+
+  def update_role
+    if @user.update(role: params[:role])
+      render json: { 
+        success: true, 
+        message: "Role berjaya dikemas kini",
+        user: {
+          id: @user.id,
+          email: @user.email_address,
+          role: @user.role,
+          student_name: @user.student&.name,
+          student_id: @user.student_id,
+          created_at: @user.created_at.strftime("%d/%m/%Y")
+        }
+      }
+    else
+      render json: { 
+        success: false, 
+        errors: @user.errors.full_messages 
+      }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def require_pengurus!
+    unless Current.user&.pengurus?
+      redirect_to root_path, alert: "Akses ditolak. Hanya pengurus yang boleh mengakses halaman ini."
+    end
+  end
+
+  def authenticate_user!
+    redirect_to new_session_path, alert: "Sila log masuk terlebih dahulu" unless Current.user
+  end
+end

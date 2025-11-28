@@ -13,6 +13,13 @@ Rails.application.routes.draw do
   end
   resources :teachers, only: [ :index ]
   
+  # Users management (pengurus only)
+  resources :users, only: [ :index ] do
+    member do
+      patch :update_role
+    end
+  end
+  
   # Parent dashboard - orang tua can only view their child's progress
   resource :parent, only: [ :show ], controller: 'parents' do
     get :activities_list, on: :member

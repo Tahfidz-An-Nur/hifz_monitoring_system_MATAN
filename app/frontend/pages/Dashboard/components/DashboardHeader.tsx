@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Users, Mic, LogOut } from "lucide-react"
+import { Users, Mic, LogOut, UserCog } from "lucide-react"
 import { router, usePage } from "@inertiajs/react"
 import { PageProps } from "@/types/auth"
 
@@ -16,15 +16,22 @@ export function DashboardHeader() {
       <div className="grid grid-cols-2 gap-2">
         {/* Only pengurus can see all students */}
         {userRole === "pengurus" && (
-          <Button variant="outline" className="border-blue-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 cursor-pointer w-full" onClick={() => router.visit("/students")}>
-            <Users className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Lihat Semua Pelajar</span>
-            <span className="sm:hidden">Pelajar</span>
-          </Button>
+          <>
+            <Button variant="outline" className="border-blue-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 cursor-pointer w-full" onClick={() => router.visit("/students")}>
+              <Users className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Lihat Semua Pelajar</span>
+              <span className="sm:hidden">Pelajar</span>
+            </Button>
+            <Button variant="outline" className="border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 cursor-pointer w-full" onClick={() => router.visit("/users")}>
+              <UserCog className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Pengurusan Pengguna</span>
+              <span className="sm:hidden">Pengguna</span>
+            </Button>
+          </>
         )}
         {/* Both pengurus and guru can access teacher mode */}
         {(userRole === "pengurus" || userRole === "guru") && (
-          <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 cursor-pointer w-full" onClick={() => router.visit("/teachers")}>
+          <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 cursor-pointer w-full col-span-full" onClick={() => router.visit("/teachers")}>
             <Mic className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Mod Guru</span>
             <span className="sm:hidden">Guru</span>

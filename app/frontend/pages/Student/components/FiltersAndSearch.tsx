@@ -38,7 +38,7 @@ export function FiltersAndSearch({
           </div>
           <h2 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">Penapis & Carian</h2>
         </div>
-        
+
         <div className="flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center flex-1">
             <div className="relative flex-1 max-w-full sm:max-w-sm">
@@ -92,11 +92,10 @@ export function FiltersAndSearch({
               <Button
                 variant={viewMode === "grid" ? "default" : "outline"}
                 size="sm"
-                className={`cursor-pointer flex-1 sm:flex-none ${
-                  viewMode === "grid" 
-                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700" 
+                className={`cursor-pointer flex-1 sm:flex-none ${viewMode === "grid"
+                    ? "bg-black text-white hover:bg-gray-800"
                     : "border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
-                }`}
+                  }`}
                 onClick={() => setViewMode("grid")}
               >
                 Grid
@@ -104,11 +103,10 @@ export function FiltersAndSearch({
               <Button
                 variant={viewMode === "list" ? "default" : "outline"}
                 size="sm"
-                className={`cursor-pointer flex-1 sm:flex-none ${
-                  viewMode === "list" 
-                    ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700" 
+                className={`cursor-pointer flex-1 sm:flex-none ${viewMode === "list"
+                    ? "bg-black text-white hover:bg-gray-800"
                     : "border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
-                }`}
+                  }`}
                 onClick={() => setViewMode("list")}
               >
                 Senarai

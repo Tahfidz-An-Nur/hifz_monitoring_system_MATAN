@@ -198,6 +198,44 @@ class StudentsController < ApplicationController
     end
   end
 
+  def promote
+    students = Student.all.order(name: :asc).map do |student|
+      student.as_json.merge(
+        avatar: avatar_url(student, size: :thumb)
+      )
+    end
+
+    # Get unique class levels for the dropdown
+    class_levels = Student.distinct.pluck(:class_level).compact.sort
+
+    render inertia: "Student/Promote", props: {
+      students: students,
+      class_levels: class_levels
+    }
+  end
+
+  def bulk_promote
+    student_ids = params[:student_ids]
+    target_class = params[:target_class]
+
+    if student_ids.blank? || target_class.blank?
+      render json: { error: "Student IDs dan kelas tujuan harus diisi" }, status: :unprocessable_entity
+      return
+    end
+
+    begin
+      updated_count = Student.where(id: student_ids).update_all(class_level: target_class)
+      
+      render json: { 
+        success: true, 
+        message: "Berhasil memindahkan #{updated_count} siswa ke #{target_class}",
+        updated_count: updated_count
+      }
+    rescue => e
+      render json: { error: "Terjadi kesalahan: #{e.message}" }, status: :internal_server_error
+    end
+  end
+
   private
 
   def student_params
@@ -383,4 +421,5 @@ class StudentsController < ApplicationController
     
     username
   end
+
 end

@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   end
   resources :students, only: [ :index, :new, :create, :show, :edit, :update ] do
     resources :activities, only: [ :create, :destroy ]
+    collection do
+      get :promote
+      post :bulk_promote
+    end
     member do
       get :activities_list
     end

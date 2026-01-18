@@ -38,7 +38,17 @@ end
 puts "Creating new student records..."
 
 # --- Data for random selection ---
-CLASSES = [ "Class A", "Class B", "Class C" ]
+# Updated class format for SMP/SMA (7-12 dengan A-D)
+CLASSES = [
+  # Kelas 7-9 (SMP) - fokus penelitian
+  "7A", "7B", "7C", "7D",
+  "8A", "8B", "8C", "8D",
+  "9A", "9B", "9C", "9D",
+  # Kelas 10-12 (SMA) - opsional untuk masa depan
+  "10A", "10B", "10C", "10D",
+  "11A", "11B", "11C", "11D",
+  "12A", "12B", "12C", "12D"
+]
 STATUSES = [ "active", "inactive", "graduated" ]
 GENDERS = [ "male", "female" ]
 

@@ -205,8 +205,13 @@ class StudentsController < ApplicationController
       )
     end
 
-    # Get unique class levels for the dropdown
-    class_levels = Student.distinct.pluck(:class_level).compact.sort
+    # Define all available class levels (7-12 with A-D sections)
+    class_levels = []
+    (7..12).each do |grade|
+      ['A', 'B', 'C', 'D'].each do |section|
+        class_levels << "#{grade}#{section}"
+      end
+    end
 
     render inertia: "Student/Promote", props: {
       students: students,

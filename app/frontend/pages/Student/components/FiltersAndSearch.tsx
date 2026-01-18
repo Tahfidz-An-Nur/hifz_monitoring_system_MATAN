@@ -57,9 +57,36 @@ export function FiltersAndSearch({
                 </SelectTrigger>
                 <SelectContent className="border-gray-200/60">
                   <SelectItem className="cursor-pointer" value="all">Semua Kelas</SelectItem>
-                  <SelectItem className="cursor-pointer" value="Class A">Kelas A</SelectItem>
-                  <SelectItem className="cursor-pointer" value="Class B">Kelas B</SelectItem>
-                  <SelectItem className="cursor-pointer" value="Class C">Kelas C</SelectItem>
+                  {/* Kelas 7 */}
+                  <SelectItem className="cursor-pointer" value="7A">7A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="7B">7B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="7C">7C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="7D">7D</SelectItem>
+                  {/* Kelas 8 */}
+                  <SelectItem className="cursor-pointer" value="8A">8A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="8B">8B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="8C">8C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="8D">8D</SelectItem>
+                  {/* Kelas 9 */}
+                  <SelectItem className="cursor-pointer" value="9A">9A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="9B">9B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="9C">9C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="9D">9D</SelectItem>
+                  {/* Kelas 10 */}
+                  <SelectItem className="cursor-pointer" value="10A">10A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="10B">10B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="10C">10C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="10D">10D</SelectItem>
+                  {/* Kelas 11 */}
+                  <SelectItem className="cursor-pointer" value="11A">11A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="11B">11B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="11C">11C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="11D">11D</SelectItem>
+                  {/* Kelas 12 */}
+                  <SelectItem className="cursor-pointer" value="12A">12A</SelectItem>
+                  <SelectItem className="cursor-pointer" value="12B">12B</SelectItem>
+                  <SelectItem className="cursor-pointer" value="12C">12C</SelectItem>
+                  <SelectItem className="cursor-pointer" value="12D">12D</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>

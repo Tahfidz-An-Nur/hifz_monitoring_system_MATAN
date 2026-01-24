@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Download, Plus, Mic, FileText, FileSpreadsheet, Sheet, GraduationCap } from "lucide-react"
+import { ArrowLeft, Download, Plus, Mic, FileText, FileSpreadsheet, Sheet, GraduationCap, Upload } from "lucide-react"
 import { router } from "@inertiajs/react"
 import {
   DropdownMenu,
@@ -96,6 +96,15 @@ export function StudentHeader({ students = [], filteredStudents }: StudentHeader
           <Plus className="h-4 w-4 mr-2" />
           <span className="hidden sm:inline">Tambah Pelajar</span>
           <span className="sm:hidden">Tambah</span>
+        </Button>
+        <Button
+          variant="outline"
+          className="border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 hover:border-cyan-300 cursor-pointer md:w-full"
+          onClick={() => router.visit("/students/bulk_import")}
+        >
+          <Upload className="h-4 w-4 mr-2" />
+          <span className="hidden sm:inline">Import Beramai-ramai</span>
+          <span className="sm:hidden">Import</span>
         </Button>
         <Button
           variant="outline"

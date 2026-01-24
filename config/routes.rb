@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     collection do
       get :promote
       post :bulk_promote
+      get :bulk_import
+      post :preview_import
+      post :bulk_create
+      get :download_template
     end
     member do
       get :activities_list

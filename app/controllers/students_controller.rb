@@ -268,6 +268,205 @@ class StudentsController < ApplicationController
     end
   end
 
+  # Bulk import methods
+  def bulk_import
+    render inertia: "Student/BulkImport"
+  end
+
+  def download_template
+    require 'csv'
+    
+    csv_data = CSV.generate(headers: true) do |csv|
+      csv << [
+        "Nama Lengkap*",
+        "Gender* (Laki-laki/Perempuan)",
+        "Tempat Lahir*",
+        "Tanggal Lahir* (YYYY-MM-DD)",
+        "Nama Ayah*",
+        "Nama Ibu*",
+        "No HP Ayah",
+        "No HP Ibu",
+        "Alamat",
+        "Kelas*",
+        "Status* (active/inactive)",
+        "Tanggal Bergabung* (YYYY-MM-DD)",
+        "Juz Hafalan Saat Ini* (1-30)",
+        "Halaman Hafalan Saat Ini* (1-604)",
+        "Surah Hafalan Saat Ini*"
+      ]
+      # Add example row
+      csv << [
+        "Ahmad Rasyid",
+        "Laki-laki",
+        "Jakarta",
+        "2012-01-15",
+        "Bapak Ahmad",
+        "Ibu Siti",
+        "081234567890",
+        "082345678901",
+        "Jl. Merdeka No. 123",
+        "1A",
+        "active",
+        Date.current.to_s,
+        "1",
+        "1",
+        "Al-Fatihah"
+      ]
+    end
+
+    send_data csv_data, 
+              filename: "template_import_pelajar_#{Date.current}.csv",
+              type: 'text/csv',
+              disposition: 'attachment'
+  end
+
+  def preview_import
+    require 'csv'
+    
+    if params[:file].blank?
+      render json: { error: "File tidak ditemukan" }, status: :unprocessable_entity
+      return
+    end
+
+    file = params[:file]
+    preview_data = []
+    errors = []
+    
+    begin
+      CSV.foreach(file.path, headers: true, encoding: 'UTF-8').with_index(2) do |row, line_num|
+        # Skip empty rows
+        next if row.to_h.values.all?(&:blank?)
+        
+        student_data = {
+          line_number: line_num,
+          name: row["Nama Lengkap*"]&.strip,
+          gender: row["Gender* (Laki-laki/Perempuan)"]&.strip&.downcase,
+          birth_place: row["Tempat Lahir*"]&.strip,
+          birth_date: row["Tanggal Lahir* (YYYY-MM-DD)"]&.strip,
+          father_name: row["Nama Ayah*"]&.strip,
+          mother_name: row["Nama Ibu*"]&.strip,
+          father_phone: row["No HP Ayah"]&.strip,
+          mother_phone: row["No HP Ibu"]&.strip,
+          address: row["Alamat"]&.strip,
+          class_level: row["Kelas*"]&.strip,
+          status: row["Status* (active/inactive)"]&.strip&.downcase,
+          date_joined: row["Tanggal Bergabung* (YYYY-MM-DD)"]&.strip,
+          current_hifz_in_juz: row["Juz Hafalan Saat Ini* (1-30)"]&.strip,
+          current_hifz_in_pages: row["Halaman Hafalan Saat Ini* (1-604)"]&.strip,
+          current_hifz_in_surah: row["Surah Hafalan Saat Ini*"]&.strip
+        }
+
+        # Validate required fields
+        row_errors = []
+        row_errors << "Nama lengkap wajib diisi" if student_data[:name].blank?
+        row_errors << "Gender wajib diisi (Laki-laki/Perempuan)" if student_data[:gender].blank?
+        row_errors << "Gender harus 'laki-laki' atau 'perempuan'" unless ["laki-laki", "perempuan"].include?(student_data[:gender])
+        row_errors << "Tempat lahir wajib diisi" if student_data[:birth_place].blank?
+        row_errors << "Tanggal lahir wajib diisi" if student_data[:birth_date].blank?
+        row_errors << "Nama ayah wajib diisi" if student_data[:father_name].blank?
+        row_errors << "Nama ibu wajib diisi" if student_data[:mother_name].blank?
+        row_errors << "Kelas wajib diisi" if student_data[:class_level].blank?
+        row_errors << "Status wajib diisi (active/inactive)" if student_data[:status].blank?
+        row_errors << "Status harus 'active' atau 'inactive'" unless ["active", "inactive"].include?(student_data[:status])
+        row_errors << "Tanggal bergabung wajib diisi" if student_data[:date_joined].blank?
+        row_errors << "Juz hafalan wajib diisi" if student_data[:current_hifz_in_juz].blank?
+        row_errors << "Halaman hafalan wajib diisi" if student_data[:current_hifz_in_pages].blank?
+        row_errors << "Surah hafalan wajib diisi" if student_data[:current_hifz_in_surah].blank?
+
+        # Validate date formats
+        begin
+          Date.parse(student_data[:birth_date]) if student_data[:birth_date].present?
+        rescue ArgumentError
+          row_errors << "Format tanggal lahir tidak valid (gunakan YYYY-MM-DD)"
+        end
+
+        begin
+          Date.parse(student_data[:date_joined]) if student_data[:date_joined].present?
+        rescue ArgumentError
+          row_errors << "Format tanggal bergabung tidak valid (gunakan YYYY-MM-DD)"
+        end
+
+        student_data[:errors] = row_errors
+        student_data[:valid] = row_errors.empty?
+        
+        preview_data << student_data
+      end
+
+      render json: {
+        success: true,
+        data: preview_data,
+        total: preview_data.length,
+        valid: preview_data.count { |d| d[:valid] },
+        invalid: preview_data.count { |d| !d[:valid] }
+      }
+    rescue CSV::MalformedCSVError => e
+      render json: { error: "File CSV tidak valid: #{e.message}" }, status: :unprocessable_entity
+    rescue => e
+      render json: { error: "Gagal memproses file: #{e.message}" }, status: :internal_server_error
+    end
+  end
+
+  def bulk_create
+    if params[:students].blank?
+      render json: { error: "Data pelajar tidak ditemukan" }, status: :unprocessable_entity
+      return
+    end
+
+    created_students = []
+    failed_students = []
+
+    params[:students].each do |student_params|
+      begin
+        student = Student.new(
+          name: student_params[:name],
+          gender: student_params[:gender],
+          birth_place: student_params[:birth_place],
+          birth_date: Date.parse(student_params[:birth_date]),
+          father_name: student_params[:father_name],
+          mother_name: student_params[:mother_name],
+          father_phone: student_params[:father_phone],
+          mother_phone: student_params[:mother_phone],
+          address: student_params[:address],
+          class_level: student_params[:class_level],
+          status: student_params[:status],
+          date_joined: Date.parse(student_params[:date_joined]),
+          current_hifz_in_juz: student_params[:current_hifz_in_juz],
+          current_hifz_in_pages: student_params[:current_hifz_in_pages],
+          current_hifz_in_surah: student_params[:current_hifz_in_surah]
+        )
+
+        if student.save
+          created_students << {
+            line_number: student_params[:line_number],
+            name: student.name,
+            id: student.id
+          }
+        else
+          failed_students << {
+            line_number: student_params[:line_number],
+            name: student_params[:name],
+            errors: student.errors.full_messages
+          }
+        end
+      rescue => e
+        failed_students << {
+          line_number: student_params[:line_number],
+          name: student_params[:name],
+          errors: [e.message]
+        }
+      end
+    end
+
+    render json: {
+      success: true,
+      created: created_students.length,
+      failed: failed_students.length,
+      created_students: created_students,
+      failed_students: failed_students,
+      message: "Berhasil membuat #{created_students.length} pelajar dari #{params[:students].length} data"
+    }
+  end
+
   private
 
   def student_params

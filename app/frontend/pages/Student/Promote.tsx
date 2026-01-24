@@ -211,13 +211,13 @@ export default function PromoteStudents({ students, class_levels }: PromoteStude
               <div className="space-y-2">
                 <Label>Filter Kelas Asal</Label>
                 <Select value={sourceClassFilter} onValueChange={setSourceClassFilter}>
-                  <SelectTrigger>
+                  <SelectTrigger className="cursor-pointer">
                     <SelectValue placeholder="Semua Kelas" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Semua Kelas</SelectItem>
                     {class_levels.map((level) => (
-                      <SelectItem key={level} value={level}>
+                      <SelectItem key={level} value={level} className="cursor-pointer">
                         {level}
                       </SelectItem>
                     ))}
@@ -229,12 +229,12 @@ export default function PromoteStudents({ students, class_levels }: PromoteStude
               <div className="space-y-2">
                 <Label>Kelas Tujuan {!markAsGraduated && '*'}</Label>
                 <Select value={targetClass} onValueChange={setTargetClass} disabled={markAsGraduated}>
-                  <SelectTrigger className={!targetClass && !markAsGraduated ? "border-orange-300" : ""}>
+                  <SelectTrigger className={!targetClass && !markAsGraduated ? "border-orange-300 cursor-pointer" : ""}>
                     <SelectValue placeholder="Pilih Kelas Tujuan" />
                   </SelectTrigger>
                   <SelectContent>
                     {class_levels.map((level) => (
-                      <SelectItem key={level} value={level}>
+                      <SelectItem key={level} value={level} className="cursor-pointer">
                         {level}
                       </SelectItem>
                     ))}
@@ -257,7 +257,7 @@ export default function PromoteStudents({ students, class_levels }: PromoteStude
                         setMarkAsGraduated(checked as boolean)
                         if (checked) setTargetClass("")
                       }}
-                      className="mt-0.5 data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600"
+                      className="mt-0.5 data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600 cursor-pointer"
                     />
                     <div className="flex-1">
                       <Label htmlFor="graduated" className="cursor-pointer font-medium flex items-center gap-2">

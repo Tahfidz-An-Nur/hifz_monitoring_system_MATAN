@@ -323,7 +323,7 @@ class StudentsController < ApplicationController
             "081234567890",
             "082345678901",
             "Jl. Merdeka No. 123",
-            "1A",
+            "7A",
             "active",
             Date.current.to_s,
             "1",
@@ -409,6 +409,14 @@ class StudentsController < ApplicationController
         row_errors << "Nama ayah wajib diisi" if student_data[:father_name].blank?
         row_errors << "Nama ibu wajib diisi" if student_data[:mother_name].blank?
         row_errors << "Kelas wajib diisi" if student_data[:class_level].blank?
+        
+        # Validate class level format (7A-12D only)
+        if student_data[:class_level].present?
+          unless valid_class_level?(student_data[:class_level])
+            row_errors << "Kelas harus antara 7A-12D (contoh: 7A, 8B, 12D)"
+          end
+        end
+        
         row_errors << "Status wajib diisi (active/inactive)" if student_data[:status].blank?
         row_errors << "Status harus 'active' atau 'inactive'" unless ["active", "inactive"].include?(student_data[:status])
         row_errors << "Tanggal bergabung wajib diisi" if student_data[:date_joined].blank?
@@ -468,7 +476,7 @@ class StudentsController < ApplicationController
           father_phone: student_params[:father_phone],
           mother_phone: student_params[:mother_phone],
           address: student_params[:address],
-          class_level: student_params[:class_level],
+          class_level: student_params[:class_level]&.upcase,
           status: student_params[:status],
           date_joined: Date.parse(student_params[:date_joined]),
           current_hifz_in_juz: student_params[:current_hifz_in_juz],
@@ -509,6 +517,21 @@ class StudentsController < ApplicationController
   end
 
   private
+
+  def valid_class_level?(class_level)
+    # Match format: grade (7-12) + section (A-D)
+    # Example: 7A, 8B, 10C, 12D
+    return false if class_level.blank?
+    
+    match = class_level.match(/^(\d+)([A-D])$/i)
+    return false unless match
+    
+    grade = match[1].to_i
+    section = match[2].upcase
+    
+    # Grade must be between 7-12, section must be A-D
+    grade >= 7 && grade <= 12 && ['A', 'B', 'C', 'D'].include?(section)
+  end
 
   def parse_date_from_excel(value)
     return nil if value.blank?

@@ -293,20 +293,20 @@ class StudentsController < ApplicationController
         )
         
         workbook.add_worksheet(name: "Import Pelajar") do |sheet|
-          # Header row
+          # Header row - Urutan: NISN, No Induk, Nama, Gender, dst
           sheet.add_row [
+            "NISN",
+            "No Induk*",
             "Nama Lengkap*",
             "Gender* (Laki-laki/Perempuan)",
             "Tempat Lahir*",
             "Tanggal Lahir* (YYYY-MM-DD)",
             "Nama Ayah*",
             "Nama Ibu*",
-            "No HP Ayah",
-            "No HP Ibu",
+            "No HP Orang Tua",
             "Alamat",
             "Kelas*",
             "Status* (active/inactive)",
-            "Tanggal Bergabung* (YYYY-MM-DD)",
             "Juz Hafalan Saat Ini* (1-30)",
             "Halaman Hafalan Saat Ini* (1-604)",
             "Surah Hafalan Saat Ini*"
@@ -314,6 +314,8 @@ class StudentsController < ApplicationController
           
           # Example row
           sheet.add_row [
+            "0123456789",
+            "2024001",
             "Ahmad Rasyid",
             "Laki-laki",
             "Jakarta",
@@ -321,18 +323,16 @@ class StudentsController < ApplicationController
             "Bapak Ahmad",
             "Ibu Siti",
             "081234567890",
-            "082345678901",
             "Jl. Merdeka No. 123",
             "7A",
             "active",
-            Date.current.to_s,
             "1",
             "1",
             "Al-Fatihah"
           ], style: example_style
           
           # Set column widths for better readability
-          sheet.column_widths 20, 25, 15, 22, 20, 20, 15, 15, 30, 10, 20, 22, 25, 28, 25
+          sheet.column_widths 15, 12, 20, 15, 15, 18, 20, 20, 17, 30, 10, 12, 25, 28, 25
         end
         
         send_data package.to_stream.read,
@@ -382,18 +382,18 @@ class StudentsController < ApplicationController
         
         student_data = {
           line_number: i,
+          nisn: row_hash["NISN"]&.to_s&.strip,
+          student_number: row_hash["No Induk*"]&.to_s&.strip,
           name: row_hash["Nama Lengkap*"]&.to_s&.strip,
           gender: row_hash["Gender* (Laki-laki/Perempuan)"]&.to_s&.strip&.downcase,
           birth_place: row_hash["Tempat Lahir*"]&.to_s&.strip,
           birth_date: parse_date_from_excel(row_hash["Tanggal Lahir* (YYYY-MM-DD)"]),
           father_name: row_hash["Nama Ayah*"]&.to_s&.strip,
           mother_name: row_hash["Nama Ibu*"]&.to_s&.strip,
-          father_phone: row_hash["No HP Ayah"]&.to_s&.strip,
-          mother_phone: row_hash["No HP Ibu"]&.to_s&.strip,
+          parent_phone: row_hash["No HP Orang Tua"]&.to_s&.strip,
           address: row_hash["Alamat"]&.to_s&.strip,
           class_level: row_hash["Kelas*"]&.to_s&.strip,
           status: row_hash["Status* (active/inactive)"]&.to_s&.strip&.downcase,
-          date_joined: parse_date_from_excel(row_hash["Tanggal Bergabung* (YYYY-MM-DD)"]),
           current_hifz_in_juz: row_hash["Juz Hafalan Saat Ini* (1-30)"]&.to_s&.strip,
           current_hifz_in_pages: row_hash["Halaman Hafalan Saat Ini* (1-604)"]&.to_s&.strip,
           current_hifz_in_surah: row_hash["Surah Hafalan Saat Ini*"]&.to_s&.strip
@@ -401,6 +401,7 @@ class StudentsController < ApplicationController
 
         # Validate required fields
         row_errors = []
+        row_errors << "No Induk wajib diisi" if student_data[:student_number].blank?
         row_errors << "Nama lengkap wajib diisi" if student_data[:name].blank?
         row_errors << "Gender wajib diisi (Laki-laki/Perempuan)" if student_data[:gender].blank?
         row_errors << "Gender harus 'laki-laki' atau 'perempuan'" unless ["laki-laki", "perempuan"].include?(student_data[:gender])
@@ -419,7 +420,6 @@ class StudentsController < ApplicationController
         
         row_errors << "Status wajib diisi (active/inactive)" if student_data[:status].blank?
         row_errors << "Status harus 'active' atau 'inactive'" unless ["active", "inactive"].include?(student_data[:status])
-        row_errors << "Tanggal bergabung wajib diisi" if student_data[:date_joined].blank?
         row_errors << "Juz hafalan wajib diisi" if student_data[:current_hifz_in_juz].blank?
         row_errors << "Halaman hafalan wajib diisi" if student_data[:current_hifz_in_pages].blank?
         row_errors << "Surah hafalan wajib diisi" if student_data[:current_hifz_in_surah].blank?
@@ -429,12 +429,6 @@ class StudentsController < ApplicationController
           Date.parse(student_data[:birth_date]) if student_data[:birth_date].present?
         rescue ArgumentError
           row_errors << "Format tanggal lahir tidak valid (gunakan YYYY-MM-DD)"
-        end
-
-        begin
-          Date.parse(student_data[:date_joined]) if student_data[:date_joined].present?
-        rescue ArgumentError
-          row_errors << "Format tanggal bergabung tidak valid (gunakan YYYY-MM-DD)"
         end
 
         student_data[:errors] = row_errors
@@ -467,18 +461,18 @@ class StudentsController < ApplicationController
     params[:students].each do |student_params|
       begin
         student = Student.new(
+          nisn: student_params[:nisn],
+          student_number: student_params[:student_number],
           name: student_params[:name],
           gender: student_params[:gender],
           birth_place: student_params[:birth_place],
           birth_date: Date.parse(student_params[:birth_date]),
           father_name: student_params[:father_name],
           mother_name: student_params[:mother_name],
-          father_phone: student_params[:father_phone],
-          mother_phone: student_params[:mother_phone],
+          parent_phone: student_params[:parent_phone],
           address: student_params[:address],
           class_level: student_params[:class_level]&.upcase,
           status: student_params[:status],
-          date_joined: Date.parse(student_params[:date_joined]),
           current_hifz_in_juz: student_params[:current_hifz_in_juz],
           current_hifz_in_pages: student_params[:current_hifz_in_pages],
           current_hifz_in_surah: student_params[:current_hifz_in_surah]
@@ -547,7 +541,7 @@ class StudentsController < ApplicationController
   end
 
   def student_params
-    params.expect(student: [ :name, :current_hifz_in_juz, :current_hifz_in_pages, :current_hifz_in_surah, :avatar, :class_level, :phone, :email, :status, :gender, :birth_place, :birth_date, :address, :father_name, :mother_name, :father_phone, :mother_phone, :date_joined ])
+    params.expect(student: [ :nisn, :student_number, :name, :current_hifz_in_juz, :current_hifz_in_pages, :current_hifz_in_surah, :avatar, :class_level, :phone, :email, :status, :gender, :birth_place, :birth_date, :address, :father_name, :mother_name, :parent_phone ])
   end
 
   def translate_grade(grade)

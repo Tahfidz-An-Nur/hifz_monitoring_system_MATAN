@@ -71,7 +71,6 @@ interface StudentsIndexProps {
 export default function StudentsIndex({ students: initialStudents, parent_credentials, statistics, pagination }: StudentsIndexProps) {
   const [students, setStudents] = useState<Student[]>(initialStudents)
   const [allStudentsForStats] = useState<Student[]>(initialStudents) // Keep original for stats if needed
-  const [searchTerm, setSearchTerm] = useState("")
   const [searchInput, setSearchInput] = useState("") // For debouncing
   const [classFilter, setClassFilter] = useState("all")
   const [juzFilter, setJuzFilter] = useState("all")
@@ -84,14 +83,47 @@ export default function StudentsIndex({ students: initialStudents, parent_creden
   const [hasMore, setHasMore] = useState(pagination.has_more)
   const [totalCount, setTotalCount] = useState(pagination.total_count)
 
-  // Debounced search - trigger search 500ms after user stops typing
+  // Debounced search - trigger backend search 500ms after user stops typing
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSearchTerm(searchInput)
+      if (searchInput !== "" || classFilter !== "all" || statusFilter !== "all" || juzFilter !== "all") {
+        // Trigger backend search via Inertia
+        router.get('/students', {
+          search: searchInput,
+          class_filter: classFilter,
+          status_filter: statusFilter,
+          juz_filter: juzFilter
+        }, {
+          preserveState: true,
+          preserveScroll: true,
+          only: ['students', 'statistics', 'pagination'],
+          onSuccess: (page) => {
+            const props = page.props as StudentsIndexProps
+            setStudents(props.students)
+            setCurrentPage(props.pagination.current_page)
+            setHasMore(props.pagination.has_more)
+            setTotalCount(props.pagination.total_count)
+          }
+        })
+      } else if (searchInput === "" && classFilter === "all" && statusFilter === "all" && juzFilter === "all") {
+        // Reset to initial state when all filters cleared
+        router.get('/students', {}, {
+          preserveState: true,
+          preserveScroll: true,
+          only: ['students', 'statistics', 'pagination'],
+          onSuccess: (page) => {
+            const props = page.props as StudentsIndexProps
+            setStudents(props.students)
+            setCurrentPage(props.pagination.current_page)
+            setHasMore(props.pagination.has_more)
+            setTotalCount(props.pagination.total_count)
+          }
+        })
+      }
     }, 500)
 
     return () => clearTimeout(timer)
-  }, [searchInput])
+  }, [searchInput, classFilter, statusFilter, juzFilter])
 
   // Show credentials dialog if parent_credentials is available
   useEffect(() => {
@@ -117,7 +149,15 @@ export default function StudentsIndex({ students: initialStudents, parent_creden
     setIsLoadingMore(true)
     try {
       const nextPage = currentPage + 1
-      const response = await fetch(`/students/load_more?page=${nextPage}`, {
+      const params = new URLSearchParams({
+        page: nextPage.toString(),
+        ...(searchInput && { search: searchInput }),
+        ...(classFilter !== "all" && { class_filter: classFilter }),
+        ...(statusFilter !== "all" && { status_filter: statusFilter }),
+        ...(juzFilter !== "all" && { juz_filter: juzFilter })
+      })
+      
+      const response = await fetch(`/students/load_more?${params}`, {
         headers: {
           'Accept': 'application/json',
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
@@ -139,24 +179,8 @@ export default function StudentsIndex({ students: initialStudents, parent_creden
     }
   }
 
-  // Filter and sort students
-  const filteredStudents = students.filter((student) => {
-    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesClass = classFilter === "all" || student.class_level === classFilter
-    const matchesStatus = statusFilter === "all" || student.status === statusFilter
-
-    // Convert current_hifz_in_juz to number for Juz filtering
-    const currentJuz = parseInt(student.current_hifz_in_juz) || 0
-    const matchesJuz =
-      juzFilter === "all" ||
-      (juzFilter === "Juz 1-5" && currentJuz >= 1 && currentJuz <= 5) ||
-      (juzFilter === "Juz 6-10" && currentJuz >= 6 && currentJuz <= 10) ||
-      (juzFilter === "Juz 11-15" && currentJuz >= 11 && currentJuz <= 15) ||
-      (juzFilter === "Juz 16-20" && currentJuz >= 16 && currentJuz <= 20) ||
-      (juzFilter === "Juz 21-25" && currentJuz >= 21 && currentJuz <= 25) ||
-      (juzFilter === "Juz 26-30" && currentJuz >= 26 && currentJuz <= 30)
-    return matchesSearch && matchesClass && matchesStatus && matchesJuz
-  })
+  // No need for client-side filtering anymore - backend handles it
+  const filteredStudents = students
 
   const getStatusBadge = (status: string) => {
     return status === "active" ? (

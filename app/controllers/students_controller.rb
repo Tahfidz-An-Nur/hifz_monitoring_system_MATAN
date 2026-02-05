@@ -14,7 +14,46 @@ class StudentsController < ApplicationController
     # Base query
     students_query = Student.all.order(name: :asc)
     
-    # Total count for pagination
+    # Apply search filter if present
+    if params[:search].present?
+      search_term = params[:search].strip.downcase
+      students_query = students_query.where(
+        "LOWER(name) LIKE ? OR LOWER(nisn) LIKE ? OR LOWER(student_number) LIKE ?",
+        "%#{search_term}%",
+        "%#{search_term}%",
+        "%#{search_term}%"
+      )
+    end
+    
+    # Apply class filter
+    if params[:class_filter].present? && params[:class_filter] != "all"
+      students_query = students_query.where(class_level: params[:class_filter])
+    end
+    
+    # Apply status filter
+    if params[:status_filter].present? && params[:status_filter] != "all"
+      students_query = students_query.where(status: params[:status_filter])
+    end
+    
+    # Apply juz filter
+    if params[:juz_filter].present? && params[:juz_filter] != "all"
+      case params[:juz_filter]
+      when "Juz 1-5"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 1, 5)
+      when "Juz 6-10"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 6, 10)
+      when "Juz 11-15"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 11, 15)
+      when "Juz 16-20"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 16, 20)
+      when "Juz 21-25"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 21, 25)
+      when "Juz 26-30"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 26, 30)
+      end
+    end
+    
+    # Total count for pagination (after filters applied)
     total_count = students_query.count
     
     # Calculate statistics from all students (not just paginated)
@@ -65,8 +104,48 @@ class StudentsController < ApplicationController
     page = params[:page]&.to_i || 1
     per_page = 20
     
-    # Query students
+    # Base query
     students_query = Student.all.order(name: :asc)
+    
+    # Apply search filter if present
+    if params[:search].present?
+      search_term = params[:search].strip.downcase
+      students_query = students_query.where(
+        "LOWER(name) LIKE ? OR LOWER(nisn) LIKE ? OR LOWER(student_number) LIKE ?",
+        "%#{search_term}%",
+        "%#{search_term}%",
+        "%#{search_term}%"
+      )
+    end
+    
+    # Apply class filter
+    if params[:class_filter].present? && params[:class_filter] != "all"
+      students_query = students_query.where(class_level: params[:class_filter])
+    end
+    
+    # Apply status filter
+    if params[:status_filter].present? && params[:status_filter] != "all"
+      students_query = students_query.where(status: params[:status_filter])
+    end
+    
+    # Apply juz filter
+    if params[:juz_filter].present? && params[:juz_filter] != "all"
+      case params[:juz_filter]
+      when "Juz 1-5"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 1, 5)
+      when "Juz 6-10"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 6, 10)
+      when "Juz 11-15"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 11, 15)
+      when "Juz 16-20"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 16, 20)
+      when "Juz 21-25"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 21, 25)
+      when "Juz 26-30"
+        students_query = students_query.where("CAST(current_hifz_in_juz AS INTEGER) BETWEEN ? AND ?", 26, 30)
+      end
+    end
+    
     total_count = students_query.count
     
     students = students_query

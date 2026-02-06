@@ -98,7 +98,7 @@ export default function StudentsIndex({ students: initialStudents, parent_creden
           preserveScroll: true,
           only: ['students', 'statistics', 'pagination'],
           onSuccess: (page) => {
-            const props = page.props as StudentsIndexProps
+            const props = page.props as unknown as StudentsIndexProps
             setStudents(props.students)
             setCurrentPage(props.pagination.current_page)
             setHasMore(props.pagination.has_more)
@@ -112,7 +112,7 @@ export default function StudentsIndex({ students: initialStudents, parent_creden
           preserveScroll: true,
           only: ['students', 'statistics', 'pagination'],
           onSuccess: (page) => {
-            const props = page.props as StudentsIndexProps
+            const props = page.props as unknown as StudentsIndexProps
             setStudents(props.students)
             setCurrentPage(props.pagination.current_page)
             setHasMore(props.pagination.has_more)

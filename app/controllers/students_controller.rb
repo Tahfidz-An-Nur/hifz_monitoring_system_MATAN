@@ -518,32 +518,35 @@ class StudentsController < ApplicationController
 
       headers = spreadsheet.row(1)
       
+      # Normalize headers - remove asterisks and extra spaces for flexible matching
+      normalized_headers = headers.map { |h| h.to_s.gsub('*', '').strip }
+      
       (2..spreadsheet.last_row).each do |i|
         row = spreadsheet.row(i)
         
         # Skip empty rows
         next if row.all?(&:blank?)
         
-        # Map row to hash using headers
-        row_hash = Hash[headers.zip(row)]
+        # Map row to hash using normalized headers
+        row_hash = Hash[normalized_headers.zip(row)]
         
         student_data = {
           line_number: i,
           nisn: row_hash["NISN"]&.to_s&.strip,
-          student_number: row_hash["No Induk*"]&.to_s&.strip,
-          name: row_hash["Nama Lengkap*"]&.to_s&.strip,
-          gender: row_hash["Gender* (Laki-laki/Perempuan)"]&.to_s&.strip&.downcase,
-          birth_place: row_hash["Tempat Lahir*"]&.to_s&.strip,
-          birth_date: parse_date_from_excel(row_hash["Tanggal Lahir* (YYYY-MM-DD)"]),
-          father_name: row_hash["Nama Ayah*"]&.to_s&.strip,
-          mother_name: row_hash["Nama Ibu*"]&.to_s&.strip,
+          student_number: row_hash["No Induk"]&.to_s&.strip,
+          name: row_hash["Nama Lengkap"]&.to_s&.strip,
+          gender: row_hash["Gender (Laki-laki/Perempuan)"]&.to_s&.strip&.downcase,
+          birth_place: row_hash["Tempat Lahir"]&.to_s&.strip,
+          birth_date: parse_date_from_excel(row_hash["Tanggal Lahir (YYYY-MM-DD)"]),
+          father_name: row_hash["Nama Ayah"]&.to_s&.strip,
+          mother_name: row_hash["Nama Ibu"]&.to_s&.strip,
           parent_phone: row_hash["No HP Orang Tua"]&.to_s&.strip,
           address: row_hash["Alamat"]&.to_s&.strip,
-          class_level: row_hash["Kelas*"]&.to_s&.strip,
-          status: row_hash["Status* (active/inactive)"]&.to_s&.strip&.downcase,
-          current_hifz_in_juz: row_hash["Juz Hafalan Saat Ini* (1-30)"]&.to_s&.strip,
-          current_hifz_in_pages: row_hash["Halaman Hafalan Saat Ini* (1-604)"]&.to_s&.strip,
-          current_hifz_in_surah: row_hash["Surah Hafalan Saat Ini*"]&.to_s&.strip
+          class_level: row_hash["Kelas"]&.to_s&.strip,
+          status: row_hash["Status (active/inactive)"]&.to_s&.strip&.downcase,
+          current_hifz_in_juz: row_hash["Juz Hafalan Saat Ini (1-30)"]&.to_s&.strip,
+          current_hifz_in_pages: row_hash["Halaman Hafalan Saat Ini (1-604)"]&.to_s&.strip,
+          current_hifz_in_surah: row_hash["Surah Hafalan Saat Ini"]&.to_s&.strip
         }
 
         # Validate required fields
